@@ -9,7 +9,9 @@
 </head>
 <body onload="onInit()" oncontextmenu="return false">
     <h1>💣 Minesweeper Pro 💣</h1>
-    
+    <button class="level level1" onclick="selectLevel({size: 4, mines: 2})">Beginner</button>
+    <button class="level level2" onclick="selectLevel({size: 8, mines: 14})">Medium</button>
+    <button class="level level3" onclick="selectLevel({size: 12, mines: 32})">Expert</button>
     <table> 
         <!-- `this,${i},${j}` -->
         <tbody class="board"></tbody>
