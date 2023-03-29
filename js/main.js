@@ -67,14 +67,16 @@ function onCellClick(elCell, i, j) {
 }
 
 function onCellMarked(elCell, i, j) {   //elCell, i, j
-   
+   console.log('i,j:', i,j)
 }
 
 function checkGameOver(){
 // ToDo: Game ends when all mines are marked, and all the other cells are shown  
 }
 
-expandShown(board, elCell, i, j)
+function expandShown(board, elCell, i, j){
+
+}
 
 function setMinesNegsCount() {
     // Count mines around each cell and set the cell's minesAroundCount. Attention- mine cells also count negs.
