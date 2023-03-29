@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" oncontextmenu="return false">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>MinesSweeper</title>
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <!-- <meta name="viewport" content="width=, initial-scale=1.0"> -->
+    <title>MineSweeper Pro</title>
     <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body onload="onInit()">
-    <h1>💣 Mines Sweeper Pro 💣</h1>
+    <h1>💣 Minesweeper Pro 💣</h1>
     
+    <table> 
+        <!-- `this,${i},${j}` -->
+        <tbody class="board"></tbody>
+    </table>
+
     
     <div class="footer">--- Gideon Levinson ---</div>
-    
+
     <script src="js/utils.js"></script>
     <script src="js/main.js"></script>
 </body>
