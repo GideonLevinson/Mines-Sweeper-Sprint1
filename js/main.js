@@ -6,7 +6,7 @@ var gBoard
 var gGame
 
 function onInit() {
-    gGame = { isOn: false, shownCount: 0, markedCount: 0, secsPassed: 1 }
+    gGame = { isOn: false, shownCount: 0, markedCount: 0, secsPassed: 0 }
     gBoard = buildBoard(gLevel.size)
     renderBoard(gBoard)
 
