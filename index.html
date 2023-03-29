@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
@@ -7,20 +8,27 @@
     <title>MineSweeper Pro</title>
     <link rel="stylesheet" href="css/styles.css" />
 </head>
+
 <body onload="onInit()" oncontextmenu="return false">
     <h1>💣 Minesweeper Pro 💣</h1>
     <button class="level level1" onclick="selectLevel({size: 4, mines: 2})">Beginner</button>
     <button class="level level2" onclick="selectLevel({size: 8, mines: 14})">Medium</button>
     <button class="level level3" onclick="selectLevel({size: 12, mines: 32})">Expert</button>
-    <table> 
-        <!-- `this,${i},${j}` -->
+    
+    <div class="time">Time:<span class='timer'>000</span></div>
+    
+    <table>
         <tbody class="board"></tbody>
     </table>
-
     
+    <div class="restart">
+        <button onclick="onInit()">Restart</button>
+    </div>
+
     <div class="footer">--- Gideon Levinson ---</div>
 
     <script src="js/utils.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>

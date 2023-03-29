@@ -4,6 +4,8 @@ const FLAG = '🚩'
 var gLevel = { size: 4, mines: 2 }
 var gBoard
 var gGame
+var gStartTime
+var gTimerIntervalId
 
 function onInit() {
     gGame = { isOn: false, shownCount: 0, markedCount: 0, secsPassed: 0 }
@@ -76,6 +78,7 @@ function checkGameOver() {
 
 function gameOver() {
     console.log('Game over')
+    stopTimer()
     gGame.isOn = false
 }
 
@@ -84,11 +87,9 @@ function randMinesIdx(gLevel) {
     while (n > 0) {
         var i = getRandomInt(0, gLevel.size)
         var j = getRandomInt(0, gLevel.size)
-        console.log(i, j, gBoard[i][j])
         if (gBoard[i][j].isMine) continue
         gBoard[i][j].isMine = true
         n--
-        console.log('n:', n)
     }
 }
 
@@ -96,12 +97,11 @@ function onCellClick(elCell, i, j) {
     if (!gGame.isOn && gGame.secsPassed !== 0) return
     if (!gGame.isOn && gGame.secsPassed === 0) {
         gGame.isOn = true
-    
+        startTimer()
     }
     if (gBoard[i][j].isMine) {
         console.log('You lost!')
         gBoard[i][j].isShown = true
-        // renderBoard(gBoard)
         gameOver()
     }
     else if (gBoard[i][j].minesAroundCount === 0) {
@@ -113,7 +113,6 @@ function onCellClick(elCell, i, j) {
     else {
         gBoard[i][j].isShown = true
         gGame.shownCount++
-        // renderBoard(gBoard)
         checkGameOver()
     }
     renderBoard(gBoard)
@@ -137,8 +136,6 @@ function onCellMarked(elCell, i, j) {   //elCell, i, j
 }
 
 function expandShown(board, elCell, i, j) {
-    console.log('expand')
-
     var cellIdx = { i, j }
     for (var i = cellIdx.i - 1; i <= cellIdx.i + 1; i++) {
         if (i < 0 || i >= gBoard.length) continue
@@ -147,16 +144,12 @@ function expandShown(board, elCell, i, j) {
             if (i === cellIdx.i && j === cellIdx.j) continue
             var currCell = gBoard[i][j]
             if (currCell.isShown) continue
-            console.log('i,j:', i, j)
             if (currCell.minesAroundCount === 0) {
-
-                console.log('i,j:', i, j)
                 onCellClick(elCell, i, j)
             }
             else {
                 gBoard[i][j].isShown = true
                 gGame.shownCount++
-                console.log('gGame.shownCount:', gGame.shownCount)
                 renderBoard(gBoard)
                 checkGameOver()
             }
@@ -192,4 +185,25 @@ function selectLevel(level) {
     gLevel = level
     onInit()
     // newGame()
+}
+
+function startTimer() {
+    gStartTime = Date.now();
+    gTimerIntervalId = setInterval(updateTimer, 10)
+}
+
+function stopTimer() {
+    clearInterval(gTimerIntervalId);
+}
+
+function updateTimer() {
+    var elapsedTime = Date.now() - gStartTime;
+    var seconds = Math.floor((elapsedTime / 1000))
+    document.querySelector('.timer').innerText = formatTime(seconds)
+}
+
+function formatTime(time) {
+    if (time < 10) return '00' + time
+    else if ((time >= 10 && time < 100)) return '0' + time
+    else return time
 }
