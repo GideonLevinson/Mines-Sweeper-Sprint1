@@ -15,15 +15,15 @@
     <button class="level level2" onclick="selectLevel({size: 8, mines: 14})">Medium</button>
     <button class="level level3" onclick="selectLevel({size: 12, mines: 32})">Expert</button>
     
-    <div class="time">Time:<span class='timer'>000</span></div>
+    <div class="user-panel">
+        <div class="restart"><button onclick="onInit()">😃</button></div>
+        <div class="time">⏱️ <span class='timer'>000</span></div>
+    </div>
     
     <table>
         <tbody class="board"></tbody>
     </table>
     
-    <div class="restart">
-        <button onclick="onInit()">Restart</button>
-    </div>
 
     <div class="footer">--- Gideon Levinson ---</div>
 

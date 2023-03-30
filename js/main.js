@@ -9,6 +9,7 @@ var gTimerIntervalId
 
 function onInit() {
     gGame = { isOn: false, shownCount: 0, markedCount: 0, secsPassed: 0 }
+    stopTimer()
     gBoard = buildBoard(gLevel.size)
     renderBoard(gBoard)
 
@@ -187,13 +188,17 @@ function selectLevel(level) {
     // newGame()
 }
 
+function restart (){
+    
+}
+
 function startTimer() {
     gStartTime = Date.now();
     gTimerIntervalId = setInterval(updateTimer, 10)
 }
 
 function stopTimer() {
-    clearInterval(gTimerIntervalId);
+    clearInterval(gTimerIntervalId)
 }
 
 function updateTimer() {
