@@ -6,16 +6,15 @@ var gBoard
 var gGame
 var gStartTime
 var gTimerIntervalId
-// localStorage.beginner = 999
-// localStorage.medium = 999
-// localStorage.expert = 999
+
+// localStorage.removeItem('medium')
+
 function onInit() {
     gGame = { isOn: false, shownCount: 0, markedCountDown: 2, secsPassed: 0 }
     stopTimer()
     gBoard = buildBoard(gLevel.size)
     gGame.markedCountDown = gLevel.mines
     renderBoard(gBoard)
-
 }
 
 function buildBoard(size) {
@@ -73,7 +72,16 @@ function renderBoard(board) {
     elBoard.innerHTML = strHTML
     const elMinesCounter = document.querySelector('.mines-counter')
     elMinesCounter.innerText = gGame.markedCountDown
-    // bestScore()
+    /// Best time render
+    if (board.length === 4) {
+        document.querySelector(".best-time").innerText = localStorage[4]
+    }
+    else if (board.length === 8) {
+        document.querySelector(".best-time").innerText = localStorage[8]
+    }
+    else if (board.length === 12) {
+        document.querySelector(".best-time").innerText = localStorage[12]
+    }
 }
 
 function checkGameOver() {
@@ -89,47 +97,18 @@ function gameOver(res) {
     var restartIcon = document.querySelector('.restart button')
     if (res === 'win') {
         restartIcon.innerText = '😎'
-        // bestScore() 
+        bestScore()
     }
     else restartIcon.innerText = '🤯'
 }
 
-// function bestScore() {
-//     var record = ''
-//     if (gLevel.size === 4) {
-//         // Retrieve
-//         record = +localStorage.beginner
-//         console.log('record:', record)
-//         if (gGame.secsPassed < record) {
-//             record = gGame.secsPassed 
-//             // Store
-//             localStorage.beginner = record
-//         }
-//          document.querySelector(".best-time").innerText = record
-//     }
-//     if (gLevel.size === 8) {
-//         console.log('hi')
-//         // Retrieve
-//         record = +localStorage.medium
-//         console.log('record:', record)
-//         if (gGame.secsPassed < record) {
-//             record = gGame.secsPassed 
-//             // Store
-//             localStorage.medium = record
-//         }
-//          document.querySelector(".best-time").innerText = record
-//     }
-//     if (gLevel.size === 12) {
-//         // Retrieve
-//         record = +localStorage.expert
-//         if (gGame.secsPassed < record) {
-//             record = gGame.secsPassed 
-//             // Store
-//             localStorage.expert = record
-//         }
-//          document.querySelector(".best-time").innerText = record
-//     }
-// }
+function bestScore() {
+    if (gGame.secsPassed === 0) return
+    var record = + localStorage[gLevel.size]
+    if (!localStorage[gLevel.size] || (gGame.secsPassed < record)) {
+        localStorage[gLevel.size] = gGame.secsPassed
+    }
+}
 
 function restart() {
     document.querySelector('.timer').innerText = '000'
