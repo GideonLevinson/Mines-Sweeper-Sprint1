@@ -6,7 +6,9 @@ var gBoard
 var gGame
 var gStartTime
 var gTimerIntervalId
-
+// localStorage.beginner = 999
+// localStorage.medium = 999
+// localStorage.expert = 999
 function onInit() {
     gGame = { isOn: false, shownCount: 0, markedCountDown: 2, secsPassed: 0 }
     stopTimer()
@@ -71,6 +73,7 @@ function renderBoard(board) {
     elBoard.innerHTML = strHTML
     const elMinesCounter = document.querySelector('.mines-counter')
     elMinesCounter.innerText = gGame.markedCountDown
+    // bestScore()
 }
 
 function checkGameOver() {
@@ -84,16 +87,66 @@ function gameOver(res) {
     stopTimer()
     gGame.isOn = false
     var restartIcon = document.querySelector('.restart button')
-    res === 'win' ? restartIcon.innerText = '😎' : restartIcon.innerText = '🤯'
+    if (res === 'win') {
+        restartIcon.innerText = '😎'
+        // bestScore() 
+    }
+    else restartIcon.innerText = '🤯'
 }
 
-function randMinesIdx(gLevel) {
+// function bestScore() {
+//     var record = ''
+//     if (gLevel.size === 4) {
+//         // Retrieve
+//         record = +localStorage.beginner
+//         console.log('record:', record)
+//         if (gGame.secsPassed < record) {
+//             record = gGame.secsPassed 
+//             // Store
+//             localStorage.beginner = record
+//         }
+//          document.querySelector(".best-time").innerText = record
+//     }
+//     if (gLevel.size === 8) {
+//         console.log('hi')
+//         // Retrieve
+//         record = +localStorage.medium
+//         console.log('record:', record)
+//         if (gGame.secsPassed < record) {
+//             record = gGame.secsPassed 
+//             // Store
+//             localStorage.medium = record
+//         }
+//          document.querySelector(".best-time").innerText = record
+//     }
+//     if (gLevel.size === 12) {
+//         // Retrieve
+//         record = +localStorage.expert
+//         if (gGame.secsPassed < record) {
+//             record = gGame.secsPassed 
+//             // Store
+//             localStorage.expert = record
+//         }
+//          document.querySelector(".best-time").innerText = record
+//     }
+// }
+
+function restart() {
+    document.querySelector('.timer').innerText = '000'
+    document.querySelector('.restart button').innerText = '😃'
+    onInit()
+}
+
+function randMinesIdx(gLevel, i, j) {
     var n = gLevel.mines
+    console.log('i,j:', i, j)
     while (n > 0) {
-        var i = getRandomInt(0, gLevel.size)
-        var j = getRandomInt(0, gLevel.size)
-        if (gBoard[i][j].isMine) continue
-        gBoard[i][j].isMine = true
+        var rndI = getRandomInt(0, gLevel.size)
+        var rndJ = getRandomInt(0, gLevel.size)
+        if (gBoard[rndI][rndJ].isMine) continue
+        if ((rndI >= i - 1 && rndJ <= j + 1) && (rndI <= i + 1 && rndJ >= j - 1)) continue
+        console.log('rndI, rndJ:', rndI, rndJ)
+        gBoard[rndI][rndJ].isMine = true
         n--
     }
 }
@@ -104,8 +157,10 @@ function onCellClick(elCell, i, j) {
     if (!gGame.isOn && gGame.secsPassed === 0) {
         gGame.isOn = true
         startTimer()
-        gBoard[0][0].isMine = true
-        gBoard[1][1].isMine = true
+        // gBoard[0][0].isMine = true
+        // gBoard[1][1].isMine = true
+        console.log('now')
+        randMinesIdx(gLevel, i, j)
         setMinesNegsCount()
     }
     if (gBoard[i][j].isMine) {
@@ -135,13 +190,11 @@ function onCellMarked(elCell, i, j) {
         gGame.markedCountDown--
         renderBoard(gBoard)
         checkGameOver()
-        console.log('if')
     }
     else if (!gBoard[i][j].isShown && gBoard[i][j].isMarked) {
         gBoard[i][j].isMarked = false
         gGame.markedCountDown++
         renderBoard(gBoard)
-        console.log('else if')
     }
 }
 
@@ -197,7 +250,6 @@ function revealAllMines() {
         for (var j = 0; j < gBoard.length; j++) {
             var currCell = gBoard[i][j]
             if (currCell.isMine === true) {
-                console.log('Hi')
                 currCell.isShown = true
             }
         }
@@ -207,13 +259,6 @@ function revealAllMines() {
 function selectLevel(level) {
     gLevel = level
     restart()
-    onInit()
-}
-
-function restart() {
-    document.querySelector('.timer').innerText = '000'
-    document.querySelector('.restart button').innerText = '😃'
-    onInit()
 }
 
 function startTimer() {
