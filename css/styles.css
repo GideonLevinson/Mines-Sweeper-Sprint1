@@ -6,13 +6,12 @@ body {
     position: relative;
     text-align: center;
     background-color: blanchedalmond;
-    /* font-family: Arial, Helvetica, sans-serif; */
 }
 
 .level {
-    font-size: 32px;
-    margin: 10px 5px;
-    width: 200px;
+    font-size: 24px;
+    margin: 5px 5px;
+    width: 160px;
     border-radius: 16px;
     font-weight: bold;
 }
@@ -40,18 +39,31 @@ body {
     border-radius: 5px;
     width: 120px;
     height: auto;
-    font-size: 48px;
-    /* margin: 2px 40%; */ 
-}
-
-.timer {
     font-size: 36px;
 }
 
+.timer {
+    font-size: 24px;
+}
+
+.mines {
+    display: inline;
+    color: black;
+    background-color: cadetblue;
+    border-radius: 5px;
+    width: 120px;
+    height: auto;
+    font-size: 36px;
+}
+
+.mines-counter {
+    font-size: 24px;
+}
+
 .restart button {
-    font-size: 48px;
+    font-size: 36px;
     border-radius: 30%;
-    block-size: 65px;
+    block-size: 50px;
     background-color: lightsteelblue;
 }
 
@@ -67,10 +79,10 @@ td {
     margin: auto;
     border: 3px solid black;
     border-collapse: collapse;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     color: black;
-    font-size: 32px;
+    font-size: 28px;
     text-align: center;
     transition: 0.5s;
     padding: 10px;
@@ -84,15 +96,16 @@ td {
 
 h1 {
     /* background-color: beige; */
-    font-size: 52px;
+    font-size: 40px;
     color: rgb(81, 37, 60);
+    margin: 5px;
 }
 
 .footer {
-    font-size: 36px;
+    font-size: 24px;
     background-color: rgba(169, 169, 169, 0.34);
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 5px;
+    margin-bottom: 5px;
     border-top: 10px double rgb(81, 37, 60);
     position: fixed;
     left: 0;
