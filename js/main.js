@@ -10,7 +10,7 @@ var gTimerIntervalId
 // localStorage.removeItem('medium')
 
 function onInit() {
-    gGame = { isOn: false, shownCount: 0, markedCountDown: 2, secsPassed: 0 }
+    gGame = { isOn: false, shownCount: 0, markedCountDown: 2, secsPassed: 0, livesLeft: 3 }
     stopTimer()
     gBoard = buildBoard(gLevel.size)
     gGame.markedCountDown = gLevel.mines
@@ -72,6 +72,7 @@ function renderBoard(board) {
     elBoard.innerHTML = strHTML
     const elMinesCounter = document.querySelector('.mines-counter')
     elMinesCounter.innerText = gGame.markedCountDown
+    document.querySelector('.lives').innerText = gGame.livesLeft
     /// Best time render
     if (board.length === 4) {
         document.querySelector(".best-time").innerText = localStorage[4]
@@ -81,52 +82,6 @@ function renderBoard(board) {
     }
     else if (board.length === 12) {
         document.querySelector(".best-time").innerText = localStorage[12]
-    }
-}
-
-function checkGameOver() {
-    if (gGame.markedCountDown === 0 && gGame.shownCount === ((gBoard.length ** 2) - gLevel.mines)) {
-        gameOver('win')
-    }
-}
-
-function gameOver(res) {
-    console.log(res)
-    stopTimer()
-    gGame.isOn = false
-    var restartIcon = document.querySelector('.restart button')
-    if (res === 'win') {
-        restartIcon.innerText = '😎'
-        bestScore()
-    }
-    else restartIcon.innerText = '🤯'
-}
-
-function bestScore() {
-    if (gGame.secsPassed === 0) return
-    var record = + localStorage[gLevel.size]
-    if (!localStorage[gLevel.size] || (gGame.secsPassed < record)) {
-        localStorage[gLevel.size] = gGame.secsPassed
-    }
-}
-
-function restart() {
-    document.querySelector('.timer').innerText = '000'
-    document.querySelector('.restart button').innerText = '😃'
-    onInit()
-}
-
-function randMinesIdx(gLevel, i, j) {
-    var n = gLevel.mines
-    console.log('i,j:', i, j)
-    while (n > 0) {
-        var rndI = getRandomInt(0, gLevel.size)
-        var rndJ = getRandomInt(0, gLevel.size)
-        if (gBoard[rndI][rndJ].isMine) continue
-        if ((rndI >= i - 1 && rndJ <= j + 1) && (rndI <= i + 1 && rndJ >= j - 1)) continue
-        console.log('rndI, rndJ:', rndI, rndJ)
-        gBoard[rndI][rndJ].isMine = true
-        n--
     }
 }
 
@@ -143,10 +98,10 @@ function onCellClick(elCell, i, j) {
         setMinesNegsCount()
     }
     if (gBoard[i][j].isMine) {
-        console.log('You lost!')
-        gBoard[i][j].isShown = true
-        gameOver('loss')
-        revealAllMines()
+        console.log('Mine!')
+        gGame.livesLeft--
+        livesLeft(i, j)
+        return
     }
     else if (gBoard[i][j].minesAroundCount === 0) {
         gBoard[i][j].isShown = true
@@ -174,6 +129,68 @@ function onCellMarked(elCell, i, j) {
         gBoard[i][j].isMarked = false
         gGame.markedCountDown++
         renderBoard(gBoard)
+    }
+}
+
+function checkGameOver() {
+    if (gGame.markedCountDown === 0 && gGame.shownCount === ((gBoard.length ** 2) - gLevel.mines)) {
+        gameOver('win')
+    }
+}
+
+function livesLeft(i, j) {
+    if (gGame.livesLeft === 0) {
+        gBoard[i][j].isShown = true
+        gameOver ('loss')
+        revealAllMines()
+        renderBoard(gBoard)
+    }
+    else {
+        // gGame.livesLeft--
+        gBoard[i][j].isShown = true
+        renderBoard(gBoard)
+        gBoard[i][j].isShown = false
+        setTimeout(renderBoard, 500, gBoard)
+    }
+}
+
+function gameOver(res) {
+    console.log(res)
+    stopTimer()
+    gGame.isOn = false
+    var restartIcon = document.querySelector('.restart button')
+    if (res === 'win') {
+        restartIcon.innerText = '😎'
+        bestScore()
+    }
+    else {
+        restartIcon.innerText = '🤯'
+    }
+}
+
+function restart() {
+    document.querySelector('.timer').innerText = '000'
+    document.querySelector('.restart button').innerText = '😃'
+    onInit()
+}
+
+function bestScore() {
+    if (gGame.secsPassed === 0) return
+    var record = + localStorage[gLevel.size]
+    if (!localStorage[gLevel.size] || (gGame.secsPassed < record)) {
+        localStorage[gLevel.size] = gGame.secsPassed
+    }
+}
+
+function randMinesIdx(gLevel, i, j) {
+    var n = gLevel.mines
+    while (n > 0) {
+        var rndI = getRandomInt(0, gLevel.size)
+        var rndJ = getRandomInt(0, gLevel.size)
+        if (gBoard[rndI][rndJ].isMine) continue
+        if ((rndI >= i - 1 && rndJ <= j + 1) && (rndI <= i + 1 && rndJ >= j - 1)) continue
+        gBoard[rndI][rndJ].isMine = true
+        n--
     }
 }
 
